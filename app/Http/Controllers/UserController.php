@@ -30,7 +30,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return new JsonResponse([
+            'data' => 'stored'
+        ]);
     }
 
     /**
@@ -38,9 +40,9 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        // return new JsonResponse([
-        //     'data' => 'Posted'
-        // ]);
+        return new JsonResponse([
+            'data' => 'Posted'
+        ]);
     }
 
     /**
@@ -56,7 +58,9 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        return new JsonResponse([
+            'data' => 'patched'
+        ]);
     }
 
     /**
@@ -64,6 +68,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return new JsonResponse([
+            'data' => 'deleted'
+        ]);
     }
 }
