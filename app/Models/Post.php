@@ -10,9 +10,16 @@ class Post extends Model
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'body',
+    ];
+
     protected $casts = [
         'body' => 'array'
     ];
+
+
     // Accessor for uppercase
     public function getTitleUpperCaseAttribute()
     {

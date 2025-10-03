@@ -5,9 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')
-    ->namespace("\App\Http\Controllers")
     ->group(function () {
-        Route::get('/comments','CommentController@index');
+        Route::get('/comments',[CommentController::class, 'index']);
 
         Route::get('/comments/{comment}', [CommentController::class, 'show']);
 
