@@ -25,13 +25,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        $created = User::query()->create([
-            'name' => $request->name,
-        ]);
+        // $created = User::query()->create([
+        //     'name' => $request->name,
+        // ]);
 
-        return new JsonResponse([
-            'data' => $created
-        ]);
+        // return new JsonResponse([
+        //     'data' => $created
+        // ]);
     }
 
     /**

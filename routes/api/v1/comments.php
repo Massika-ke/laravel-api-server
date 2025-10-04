@@ -4,7 +4,7 @@ use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware('auth')
+Route::middleware('auth:sanctum')
     ->group(function () {
         Route::get('/comments',[CommentController::class, 'index']);
 
