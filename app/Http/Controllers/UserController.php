@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,8 +13,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        $user = User::query()->get();
+
         return new JsonResponse([
-            'data' => 'MoSES'
+            'data' => $user
         ]);
     }
 
@@ -22,7 +25,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        
+        $created = User::query()->create([
+            'name' => $request->name,
+        ]);
+
+        return new JsonResponse([
+            'data' => $created
+        ]);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
 {
@@ -13,7 +14,11 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $comments = Comment::query()->get();
+
+        return new JsonResponse([
+            'data'=> $comments
+        ]);
     }
 
     /**
@@ -21,7 +26,13 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        //
+        $created = Comment::query()->create([
+            'body' => $request->body,
+        ]);
+
+        return new JsonResponse([
+            'data' => $created
+        ]);
     }
 
     /**
@@ -29,7 +40,9 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        return new JsonResponse([
+            'data' => $comment
+        ]);
     }
 
     /**
@@ -37,7 +50,23 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        //
+        $updated = $comment->update($request->only('title', 'body'));
+
+        // $updated = $comment->update([
+        //     'body' => $request->body ?? $post->body,
+        // ]);
+
+        if (!$updated) {
+            return new JsonResponse([
+                'errors' =>[
+                    'Failed to update model'
+                ]
+                ], 400); 
+        }
+
+        return new JsonResponse([
+            'data' => $comment
+        ]);
     }
 
     /**
@@ -45,6 +74,17 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $deleted = $comment->forceDelete();
+
+        if (!$deleted) {
+            return new JsonResponse([
+                'errors' => [
+                    'Could not delete resource'
+                ]
+                ], 400);
+        }
+        return new JsonResponse([
+            'data' => 'sucess'
+        ]);
     }
 }
