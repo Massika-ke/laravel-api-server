@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Http\Resources\CommentResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -30,9 +32,18 @@ class CommentController extends Controller
             'body' => $request->body,
         ]);
 
-        return new JsonResponse([
-            'data' => $created
-        ]);
+        $created = DB::transaction(function () use ($request) {
+            $created = Comment::query()->create([
+                'body' => $request->body,
+            ]);
+
+            if ($userIds = $request->user_ids) {
+                $created->users()->sync($userIds);
+            }
+            return $created;
+        });
+
+        return new CommentResource($created);
     }
 
     /**
@@ -40,9 +51,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        return new JsonResponse([
-            'data' => $comment
-        ]);
+        return new CommentResource($comment);
     }
 
     /**
@@ -61,13 +70,12 @@ class CommentController extends Controller
                 'errors' =>[
                     'Failed to update model'
                 ]
-                ], 400); 
+                ], 400);
         }
 
-        return new JsonResponse([
-            'data' => $comment
-        ]);
+        return new CommentResource($comment);
     }
+
 
     /**
      * Remove the specified resource from storage.
