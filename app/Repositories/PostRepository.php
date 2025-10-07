@@ -11,7 +11,7 @@ class PostRepository extends BaseRepository
     {
         return DB::transaction(function () use ($attributes){
 
-            $created = Post ::query()->create([
+            $created = Post::query()->create([
                 'title' => data_get($attributes, 'title', 'Untitled'),
                 'body' => data_get($attributes, 'body'),
             ]);
