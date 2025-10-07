@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Resources\CommentResource;
+// use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -16,11 +17,11 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::query()->get();
+        $pageSize = $request->page_size ?? 20;
 
-        return new JsonResponse([
-            'data'=> $comments
-        ]);
+        $comments = Comment::query()->paginate($pageSize);
+
+        return new CommentResource($comments);
     }
 
     /**
